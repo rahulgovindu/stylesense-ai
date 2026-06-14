@@ -27,12 +27,45 @@ export default function Root({ children }: { children: React.ReactNode }) {
   );
 }
 
+// On web we present the app inside a centered phone frame so the browser demo
+// reads as a real mobile app instead of a stretched full-width page.
+// On narrow (real phone) viewports the frame collapses to full-bleed.
 const responsiveBackground = `
-body {
-  background-color: #fff;
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+html, body {
+  height: 100%;
+  margin: 0;
+  background: radial-gradient(circle at 50% 0%, #2c2c4a 0%, #16161f 70%);
 }
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #000;
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+#root {
+  width: 390px;
+  max-width: 100%;
+  height: 90vh;
+  max-height: 844px;
+  background-color: #F8F7F4;
+  border-radius: 44px;
+  overflow: hidden;
+  box-shadow: 0 0 0 11px #0d0d14, 0 0 0 13px #2a2a3a, 0 40px 90px rgba(0,0,0,0.55);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+/* Real phones: drop the frame, go full screen */
+@media (max-width: 440px) {
+  body { padding: 0; }
+  #root {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+    box-shadow: none;
   }
 }`;
