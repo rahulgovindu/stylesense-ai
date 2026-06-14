@@ -56,6 +56,104 @@ export const mockUser = {
   email: 'demo@stylesense.ai',
   subscriptionTier: 'free' as 'free' | 'pro',
   city: 'Bengaluru',
+  // Niche we build for first (Risk: dominate one segment before expanding)
+  segment: 'Young professional · 22–32',
+};
+
+// ---------------------------------------------------------------------------
+// Personality archetypes — the differentiator: archetype × occasion depth.
+// The quiz maps a user to one of these; reasoning is written in its voice.
+// ---------------------------------------------------------------------------
+export type Archetype = {
+  key: string;
+  name: string;
+  emoji: string;
+  tagline: string;
+  description: string;
+  palette: string[];
+  dresses: string; // how this archetype likes to dress
+};
+
+export const archetypes: Record<string, Archetype> = {
+  executive: {
+    key: 'executive',
+    name: 'The Executive',
+    emoji: '👔',
+    tagline: 'Polished, decisive, commands the room',
+    description:
+      'You dress to be taken seriously. Clean lines, considered neutrals, nothing loud — your clothes do the talking before you do.',
+    palette: ['Navy', 'Charcoal', 'White', 'Burgundy'],
+    dresses: 'Sharp, structured, neutral-forward',
+  },
+  creative: {
+    key: 'creative',
+    name: 'The Creative',
+    emoji: '🎨',
+    tagline: 'Expressive, bold, rules are optional',
+    description:
+      'Style is self-expression for you. You mix texture, colour and the unexpected — and you can carry a statement piece without blinking.',
+    palette: ['Olive', 'Rust', 'Mustard', 'Indigo'],
+    dresses: 'Layered, textured, statement-led',
+  },
+  introvert: {
+    key: 'introvert',
+    name: 'The Quiet Confident',
+    emoji: '🌿',
+    tagline: 'Understated, comfortable, effortlessly put-together',
+    description:
+      'You like to blend in beautifully. Comfort-first, low-maintenance, but always intentional — never sloppy, never flashy.',
+    palette: ['Beige', 'Sage', 'White', 'Stone'],
+    dresses: 'Relaxed, tonal, quietly refined',
+  },
+  minimalist: {
+    key: 'minimalist',
+    name: 'The Minimalist',
+    emoji: '◻️',
+    tagline: 'Less, but better',
+    description:
+      'A tight capsule of pieces that all work together. You value quality over quantity and a uniform you can trust.',
+    palette: ['White', 'Black', 'Grey', 'Navy'],
+    dresses: 'Clean, monochrome, capsule-driven',
+  },
+};
+
+export const getArchetype = (key: string | null | undefined): Archetype =>
+  archetypes[key ?? 'executive'] ?? archetypes.executive;
+
+// Quiz answer (first question) → archetype key
+export const archetypeForAnswer = (answer: string): string => {
+  const map: Record<string, string> = {
+    'Classic & timeless': 'executive',
+    'Trendy & bold': 'creative',
+    'Minimal & clean': 'minimalist',
+    'Relaxed & comfy': 'introvert',
+  };
+  return map[answer] ?? 'executive';
+};
+
+// ---------------------------------------------------------------------------
+// Smartwatch / health integration — zero competitors do this.
+// Activity, sleep & schedule data shape the day's styling recommendation.
+// ---------------------------------------------------------------------------
+export const mockHealth = {
+  connected: true,
+  device: 'Apple Watch Series 9',
+  steps: 8430,
+  stepsGoal: 10000,
+  restingHeartRate: 62,
+  sleepHours: 6.4,
+  activityLevel: 'High' as 'High' | 'Moderate' | 'Low',
+  calendarLoad: '3 back-to-back meetings',
+  // The styling insight derived from the watch data
+  headline: 'Active, high-load day ahead',
+  styleInsight:
+    'Your watch logged a morning workout and a packed calendar. StyleSense is prioritising breathable, low-maintenance fabrics that stay crisp from 9am to dinner — and skipping heavy layers you’d be carrying around all day.',
+  factors: [
+    { icon: 'walk', label: 'Activity', value: 'High · workout logged', note: 'Breathable fabrics' },
+    { icon: 'bed', label: 'Sleep', value: '6.4 hrs · below average', note: 'Comfort-first fit' },
+    { icon: 'calendar', label: 'Schedule', value: '3 meetings, 1 dinner', note: 'Desk-to-dinner versatile' },
+    { icon: 'heart', label: 'Resting HR', value: '62 bpm · calm', note: 'You can handle a bold accent' },
+  ],
 };
 
 export const mockProfile = {
@@ -216,6 +314,55 @@ export const wardrobeItems: WardrobeItem[] = [
     isFavourite: false,
     timesWorn: 9,
   },
+  // ---- India-first: ethnic / festive wear (illustrative colour tiles) ----
+  {
+    id: 'w9',
+    imageUrl: 'https://placehold.co/600x600/1F2A44/E8B86D?text=Navy+Kurta',
+    category: 'Ethnic',
+    subCategory: 'Cotton Kurta',
+    primaryColour: 'Navy',
+    colourHex: '#1F2A44',
+    pattern: 'Solid',
+    formalityLevel: 3,
+    occasionTags: ['Festive', 'Casual', 'Pujo'],
+    seasonTags: ['All Season'],
+    fabric: 'Cotton',
+    brand: 'FabIndia',
+    isFavourite: true,
+    timesWorn: 6,
+  },
+  {
+    id: 'w10',
+    imageUrl: 'https://placehold.co/600x600/800020/F8F7F4?text=Bandhgala',
+    category: 'Ethnic',
+    subCategory: 'Bandhgala Jacket',
+    primaryColour: 'Burgundy',
+    colourHex: '#800020',
+    pattern: 'Solid',
+    formalityLevel: 5,
+    occasionTags: ['Festive', 'Wedding', 'Diwali'],
+    seasonTags: ['Winter', 'All Season'],
+    fabric: 'Silk Blend',
+    brand: 'Manyavar',
+    isFavourite: false,
+    timesWorn: 2,
+  },
+  {
+    id: 'w11',
+    imageUrl: 'https://placehold.co/600x600/6F4E37/F8F7F4?text=Juttis',
+    category: 'Footwear',
+    subCategory: 'Leather Juttis',
+    primaryColour: 'Tan',
+    colourHex: '#A6743C',
+    pattern: 'Solid',
+    formalityLevel: 4,
+    occasionTags: ['Festive', 'Wedding', 'Diwali'],
+    seasonTags: ['All Season'],
+    fabric: 'Leather',
+    brand: 'Fizdi',
+    isFavourite: false,
+    timesWorn: 3,
+  },
 ];
 
 export const outfitRecommendations: OutfitRecommendation[] = [
@@ -225,7 +372,7 @@ export const outfitRecommendations: OutfitRecommendation[] = [
     occasionLabel: 'Client meeting at the office',
     itemIds: ['w1', 'w3', 'w7'],
     reasoning:
-      "For a client meeting you want to read as polished but approachable — not stiff. The crisp white Oxford signals competence, while the beige chinos keep it modern rather than corporate-severe. Brown leather loafers tie the warm tones together and elevate the whole look above a standard shirt-and-trouser combo. This plays directly to your Warm skin tone and Smart Casual archetype.",
+      "As The Executive, you want to read as polished but approachable — not stiff. The crisp white Oxford signals competence, while the beige chinos keep it modern rather than corporate-severe. Brown leather loafers tie the warm tones together and elevate the whole look above a standard shirt-and-trouser combo. Your Apple Watch shows a workout this morning and 3 back-to-back meetings, so this pick stays breathable and crease-resistant from desk to dinner — no jacket to lug around. Plays directly to your warm skin tone too.",
     confidenceScore: 0.94,
     weatherTempC: 27,
     weatherCondition: 'Partly Cloudy',
@@ -252,6 +399,17 @@ export const outfitRecommendations: OutfitRecommendation[] = [
     weatherTempC: 22,
     weatherCondition: 'Cool Evening',
   },
+  {
+    id: 'o4',
+    occasionType: 'festive',
+    occasionLabel: 'Diwali party at a friend’s place',
+    itemIds: ['w9', 'w10', 'w11'],
+    reasoning:
+      "Festive occasions are where The Executive can loosen up without losing polish. The navy cotton kurta keeps you cool through a long evening, the burgundy bandhgala adds richness for the photos, and tan juttis finish it the Indian way. Deep jewel tones flatter your warm skin tone and read beautifully under warm festive lighting. Comfortable enough that your watch won't be nagging you to stand up.",
+    confidenceScore: 0.9,
+    weatherTempC: 26,
+    weatherCondition: 'Clear',
+  },
 ];
 
 export const wardrobeAnalysis: WardrobeAnalysis = {
@@ -267,7 +425,7 @@ export const wardrobeAnalysis: WardrobeAnalysis = {
   weaknesses: [
     'No lightweight layering piece for transitional weather',
     'Limited pattern variety — almost everything is solid',
-    'Only one true formal option for events',
+    'Thin on festive/ethnic options for the Indian event calendar',
   ],
   totalItemsAnalysed: 8,
   gapItems: [
@@ -297,6 +455,14 @@ export const wardrobeAnalysis: WardrobeAnalysis = {
       platform: 'Myntra',
       imageUrl:
         'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&q=80',
+    },
+    {
+      id: 'g4',
+      name: 'Silk-Blend Nehru Jacket',
+      reason: 'Festive-ready layer for Diwali, weddings & receptions — a clear gap.',
+      priceInr: 3499,
+      platform: 'Myntra',
+      imageUrl: 'https://placehold.co/400x400/2D6A4F/F8F7F4?text=Nehru+Jacket',
     },
   ],
 };

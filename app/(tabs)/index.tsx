@@ -4,24 +4,35 @@ import { Ionicons } from '@expo/vector-icons';
 import {
   mockUser,
   mockWeather,
+  mockHealth,
   wardrobeAnalysis,
   outfitRecommendations,
   getItemById,
+  getArchetype,
 } from '../../lib/mockData';
+import { useAppStore } from '../../lib/store';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const archetypeKey = useAppStore((s) => s.archetypeKey);
+  const smartwatchConnected = useAppStore((s) => s.smartwatchConnected);
+  const archetype = getArchetype(archetypeKey);
   const featured = outfitRecommendations[0];
   const featuredItems = featured.itemIds.map(getItemById).filter(Boolean);
 
   return (
     <ScrollView className="flex-1 bg-background" contentContainerStyle={{ padding: 20 }}>
       {/* Greeting + weather */}
-      <View className="flex-row justify-between items-start mb-5">
-        <View>
+      <View className="flex-row justify-between items-start mb-3">
+        <View className="flex-1 pr-3">
           <Text className="font-playfair text-3xl text-primary font-bold">
             Good morning,{'\n'}{mockUser.displayName} 👋
           </Text>
+          <View className="flex-row items-center mt-2 self-start bg-primary px-3 py-1 rounded-full">
+            <Text className="text-accent text-xs font-semibold">
+              {archetype.emoji} {archetype.name}
+            </Text>
+          </View>
         </View>
         <View className="bg-surface px-3 py-2 rounded-xl border border-gray-100 items-center">
           <Text className="text-2xl">{mockWeather.emoji}</Text>
@@ -29,6 +40,39 @@ export default function HomeScreen() {
           <Text className="text-textSecondary text-xs">{mockWeather.city}</Text>
         </View>
       </View>
+
+      {/* Smartwatch insight — the differentiator */}
+      {smartwatchConnected && (
+        <TouchableOpacity
+          onPress={() => router.push('/smartwatch')}
+          className="bg-accent/15 border border-accent/40 rounded-2xl p-4 mb-5"
+        >
+          <View className="flex-row items-center mb-1">
+            <Ionicons name="watch-outline" size={18} color="#1A1A2E" />
+            <Text className="text-primary font-bold ml-2 flex-1">
+              From your {mockHealth.device}
+            </Text>
+            <Ionicons name="chevron-forward" size={18} color="#1A1A2E" />
+          </View>
+          <Text className="text-textPrimary text-sm leading-5" numberOfLines={3}>
+            {mockHealth.styleInsight}
+          </Text>
+          <View className="flex-row mt-3">
+            <View className="flex-row items-center mr-4">
+              <Ionicons name="footsteps-outline" size={14} color="#6B6B7B" />
+              <Text className="text-textSecondary text-xs ml-1">{mockHealth.steps.toLocaleString('en-IN')} steps</Text>
+            </View>
+            <View className="flex-row items-center mr-4">
+              <Ionicons name="bed-outline" size={14} color="#6B6B7B" />
+              <Text className="text-textSecondary text-xs ml-1">{mockHealth.sleepHours}h sleep</Text>
+            </View>
+            <View className="flex-row items-center">
+              <Ionicons name="pulse-outline" size={14} color="#6B6B7B" />
+              <Text className="text-textSecondary text-xs ml-1">{mockHealth.activityLevel} activity</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )}
 
       {/* Wardrobe score card */}
       <TouchableOpacity

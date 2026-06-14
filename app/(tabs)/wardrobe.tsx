@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { wardrobeItems } from '../../lib/mockData';
 
-const CATEGORIES = ['All', 'Top', 'Bottom', 'Outerwear', 'Footwear'];
+const CATEGORIES = ['All', 'Top', 'Bottom', 'Outerwear', 'Ethnic', 'Footwear'];
 
 export default function WardrobeScreen() {
   const router = useRouter();

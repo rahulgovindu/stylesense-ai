@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { mockUser, mockProfile, wardrobeItems } from '../../lib/mockData';
+import { mockUser, mockProfile, wardrobeItems, getArchetype, mockHealth } from '../../lib/mockData';
 import { useAppStore } from '../../lib/store';
 
 function Row({ label, value }: { label: string; value: string }) {
@@ -16,6 +16,9 @@ function Row({ label, value }: { label: string; value: string }) {
 export default function ProfileScreen() {
   const router = useRouter();
   const signOut = useAppStore((s) => s.signOut);
+  const archetypeKey = useAppStore((s) => s.archetypeKey);
+  const smartwatchConnected = useAppStore((s) => s.smartwatchConnected);
+  const archetype = getArchetype(archetypeKey);
 
   const handleSignOut = () => {
     signOut();
@@ -35,6 +38,17 @@ export default function ProfileScreen() {
           {mockUser.displayName}
         </Text>
         <Text className="text-textSecondary">{mockUser.email}</Text>
+        <Text className="text-textSecondary text-xs mt-1">{mockUser.segment}</Text>
+      </View>
+
+      {/* Personality archetype */}
+      <View className="bg-accent/15 border border-accent/40 rounded-2xl p-4 mb-4 flex-row items-center">
+        <Text className="text-4xl mr-3">{archetype.emoji}</Text>
+        <View className="flex-1">
+          <Text className="text-textSecondary text-xs">Your style personality</Text>
+          <Text className="text-primary font-bold text-lg">{archetype.name}</Text>
+          <Text className="text-textSecondary text-xs">{archetype.tagline}</Text>
+        </View>
       </View>
 
       {/* Subscription banner */}
@@ -53,7 +67,7 @@ export default function ProfileScreen() {
       {/* Style profile */}
       <Text className="font-playfair text-xl text-primary font-bold mb-2">Style Profile</Text>
       <View className="bg-surface rounded-2xl border border-gray-100 px-4 mb-6">
-        <Row label="Style archetype" value={mockProfile.styleArchetype} />
+        <Row label="Style archetype" value={archetype.name} />
         <Row label="Body type" value={mockProfile.bodyType} />
         <Row label="Skin tone" value={`${mockProfile.skinToneCategory} · ${mockProfile.skinToneShade}`} />
         <Row label="City" value={mockUser.city} />
@@ -71,7 +85,37 @@ export default function ProfileScreen() {
         ))}
       </View>
 
-      {/* Menu */}
+      {/* Connected devices + B2B + menu */}
+      <TouchableOpacity
+        onPress={() => router.push('/smartwatch')}
+        className="bg-surface rounded-xl border border-gray-100 px-4 py-4 mb-2 flex-row items-center justify-between"
+      >
+        <View className="flex-row items-center">
+          <Ionicons name="watch-outline" size={20} color="#1A1A2E" style={{ marginRight: 10 }} />
+          <View>
+            <Text className="text-primary">Smartwatch & health</Text>
+            <Text className="text-textSecondary text-xs">
+              {smartwatchConnected ? `${mockHealth.device} · connected` : 'Not connected'}
+            </Text>
+          </View>
+        </View>
+        <Ionicons name="chevron-forward" size={18} color="#9A9AAB" />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => router.push('/business')}
+        className="bg-surface rounded-xl border border-gray-100 px-4 py-4 mb-2 flex-row items-center justify-between"
+      >
+        <View className="flex-row items-center">
+          <Ionicons name="briefcase-outline" size={20} color="#1A1A2E" style={{ marginRight: 10 }} />
+          <View>
+            <Text className="text-primary">StyleSense for Teams</Text>
+            <Text className="text-textSecondary text-xs">For HR & corporate gifting</Text>
+          </View>
+        </View>
+        <Ionicons name="chevron-forward" size={18} color="#9A9AAB" />
+      </TouchableOpacity>
+
       {['Notifications', 'Privacy & data', 'Help & support', 'About StyleSense AI'].map((m) => (
         <TouchableOpacity
           key={m}

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { quizQuestions } from '../../lib/mockData';
+import { quizQuestions, archetypeForAnswer } from '../../lib/mockData';
 import { useAppStore } from '../../lib/store';
 
 export default function QuizScreen() {
   const router = useRouter();
   const setQuizAnswer = useAppStore((s) => s.setQuizAnswer);
+  const setArchetype = useAppStore((s) => s.setArchetype);
   const [step, setStep] = useState(0);
 
   const q = quizQuestions[step];
@@ -14,8 +15,10 @@ export default function QuizScreen() {
 
   const choose = (answer: string) => {
     setQuizAnswer(q.id, answer);
+    // The first question reveals the personality archetype (executive/creative/…)
+    if (step === 0) setArchetype(archetypeForAnswer(answer));
     if (isLast) {
-      router.push('/profile-setup');
+      router.push('/archetype');
     } else {
       setStep((s) => s + 1);
     }

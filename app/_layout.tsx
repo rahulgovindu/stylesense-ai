@@ -23,6 +23,14 @@ export default function RootLayout() {
           name="add-item"
           options={{ headerShown: true, title: "Add to Wardrobe", presentation: "modal" }}
         />
+        <Stack.Screen
+          name="smartwatch"
+          options={{ headerShown: true, title: "Health-Aware Styling" }}
+        />
+        <Stack.Screen
+          name="business"
+          options={{ headerShown: true, title: "StyleSense for Teams" }}
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
     </>

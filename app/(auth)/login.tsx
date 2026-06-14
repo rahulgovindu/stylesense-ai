@@ -18,8 +18,11 @@ export default function LoginScreen() {
         <Ionicons name="sparkles" size={30} color="#E8B86D" />
       </View>
       <Text className="font-playfair text-4xl text-primary font-bold mb-2">StyleSense AI</Text>
-      <Text className="text-textSecondary mb-10 text-center">
+      <Text className="text-textSecondary mb-1 text-center">
         India's first personality-driven{'\n'}AI personal stylist.
+      </Text>
+      <Text className="text-textSecondary text-xs mb-10 text-center">
+        Built for young professionals, 22–32.
       </Text>
 
       <TouchableOpacity
