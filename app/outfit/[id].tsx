@@ -81,7 +81,14 @@ export default function OutfitDetailScreen() {
           </TouchableOpacity>
         ))}
 
-        <View className="flex-row mt-2">
+        <TouchableOpacity
+          onPress={() => router.push(`/tryon?outfitId=${outfit.id}`)}
+          className="bg-surface border border-primary py-4 rounded-xl items-center mt-2 mb-2 flex-row justify-center"
+        >
+          <Ionicons name="body-outline" size={18} color="#1A1A2E" style={{ marginRight: 8 }} />
+          <Text className="text-primary font-semibold">Virtual try-on</Text>
+        </TouchableOpacity>
+        <View className="flex-row">
           <TouchableOpacity className="flex-1 bg-primary py-4 rounded-xl items-center mr-2 flex-row justify-center">
             <Ionicons name="checkmark" size={18} color="#fff" style={{ marginRight: 6 }} />
             <Text className="text-white font-semibold">Wear this</Text>

@@ -103,6 +103,34 @@ export default function ProfileScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity
+        onPress={() => router.push('/calendar')}
+        className="bg-surface rounded-xl border border-gray-100 px-4 py-4 mb-2 flex-row items-center justify-between"
+      >
+        <View className="flex-row items-center">
+          <Ionicons name="calendar-outline" size={20} color="#1A1A2E" style={{ marginRight: 10 }} />
+          <View>
+            <Text className="text-primary">Calendar</Text>
+            <Text className="text-textSecondary text-xs">Google Calendar · connected</Text>
+          </View>
+        </View>
+        <Ionicons name="chevron-forward" size={18} color="#9A9AAB" />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => router.push('/wellness')}
+        className="bg-surface rounded-xl border border-gray-100 px-4 py-4 mb-2 flex-row items-center justify-between"
+      >
+        <View className="flex-row items-center">
+          <Ionicons name="fitness-outline" size={20} color="#1A1A2E" style={{ marginRight: 10 }} />
+          <View>
+            <Text className="text-primary">Body metrics</Text>
+            <Text className="text-textSecondary text-xs">BMI & fit tuning · optional</Text>
+          </View>
+        </View>
+        <Ionicons name="chevron-forward" size={18} color="#9A9AAB" />
+      </TouchableOpacity>
+
+      <TouchableOpacity
         onPress={() => router.push('/business')}
         className="bg-surface rounded-xl border border-gray-100 px-4 py-4 mb-2 flex-row items-center justify-between"
       >

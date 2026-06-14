@@ -31,6 +31,10 @@ export default function RootLayout() {
           name="business"
           options={{ headerShown: true, title: "StyleSense for Teams" }}
         />
+        <Stack.Screen name="calendar" options={{ headerShown: true, title: "Calendar" }} />
+        <Stack.Screen name="event-styling" options={{ headerShown: true, title: "Style an Event" }} />
+        <Stack.Screen name="tryon" options={{ headerShown: true, title: "Virtual Try-On" }} />
+        <Stack.Screen name="wellness" options={{ headerShown: true, title: "Body Metrics" }} />
         <Stack.Screen name="+not-found" />
       </Stack>
     </>

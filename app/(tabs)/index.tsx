@@ -7,6 +7,7 @@ import {
   mockHealth,
   wardrobeAnalysis,
   outfitRecommendations,
+  upcomingEvents,
   getItemById,
   getArchetype,
 } from '../../lib/mockData';
@@ -126,30 +127,40 @@ export default function HomeScreen() {
         </View>
       </TouchableOpacity>
 
-      {/* Other occasions */}
-      <Text className="font-playfair text-xl text-primary font-bold mb-3 mt-3">
-        For your week
-      </Text>
-      {outfitRecommendations.slice(1).map((o) => (
+      {/* Upcoming events from calendar */}
+      <View className="flex-row items-center justify-between mb-3 mt-3">
+        <Text className="font-playfair text-xl text-primary font-bold">Upcoming events</Text>
+        <TouchableOpacity onPress={() => router.push('/calendar')}>
+          <Text className="text-accent font-semibold">Calendar →</Text>
+        </TouchableOpacity>
+      </View>
+      {upcomingEvents.slice(0, 3).map((ev) => (
         <TouchableOpacity
-          key={o.id}
-          onPress={() => router.push(`/outfit/${o.id}`)}
+          key={ev.id}
+          onPress={() => router.push(`/outfit/${ev.outfitId}`)}
           className="bg-surface rounded-xl border border-gray-100 p-4 mb-3 flex-row items-center"
         >
           <View className="w-10 h-10 rounded-full bg-accent/20 items-center justify-center mr-3">
             <Ionicons name="calendar-outline" size={20} color="#E8B86D" />
           </View>
           <View className="flex-1">
-            <Text className="text-primary font-semibold">{o.occasionLabel}</Text>
+            <Text className="text-primary font-semibold" numberOfLines={1}>{ev.title}</Text>
             <Text className="text-textSecondary text-xs">
-              {Math.round(o.confidenceScore * 100)}% match · tap to view
+              {ev.dateLabel} · {ev.timeLabel} · outfit ready
             </Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color="#9A9AAB" />
         </TouchableOpacity>
       ))}
 
-      {/* Quick action */}
+      {/* Quick actions */}
+      <TouchableOpacity
+        onPress={() => router.push('/event-styling')}
+        className="bg-accent py-4 rounded-xl items-center mt-3 flex-row justify-center"
+      >
+        <Ionicons name="sparkles" size={18} color="#1A1A2E" style={{ marginRight: 8 }} />
+        <Text className="text-primary font-bold text-base">Style me for an event</Text>
+      </TouchableOpacity>
       <TouchableOpacity
         onPress={() => router.push('/add-item')}
         className="bg-primary py-4 rounded-xl items-center mt-3 flex-row justify-center"

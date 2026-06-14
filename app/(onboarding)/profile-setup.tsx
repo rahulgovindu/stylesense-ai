@@ -3,8 +3,11 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAppStore } from '../../lib/store';
 
+const GENDERS = ['Male', 'Female', 'Non-binary'];
 const BODY_TYPES = ['Slim', 'Athletic', 'Average', 'Broad'];
 const SKIN_TONES = ['Fair', 'Wheatish', 'Dusky', 'Deep'];
+const HAIR = ['Short', 'Medium', 'Long', 'Bald'];
+const HEIGHTS = ['<160cm', '160–175cm', '175–185cm', '>185cm'];
 const CITIES = ['Bengaluru', 'Mumbai', 'Delhi', 'Hyderabad'];
 
 function Chips({
@@ -45,8 +48,11 @@ export default function ProfileSetupScreen() {
   const router = useRouter();
   const completeOnboarding = useAppStore((s) => s.completeOnboarding);
 
+  const [gender, setGender] = useState('Male');
   const [bodyType, setBodyType] = useState('Athletic');
   const [skinTone, setSkinTone] = useState('Wheatish');
+  const [hair, setHair] = useState('Short');
+  const [height, setHeight] = useState('175–185cm');
   const [city, setCity] = useState('Bengaluru');
 
   const finish = () => {
@@ -61,8 +67,11 @@ export default function ProfileSetupScreen() {
         A few details so recommendations actually fit you.
       </Text>
 
+      <Chips label="Gender" options={GENDERS} value={gender} onChange={setGender} />
       <Chips label="Body type" options={BODY_TYPES} value={bodyType} onChange={setBodyType} />
       <Chips label="Skin tone" options={SKIN_TONES} value={skinTone} onChange={setSkinTone} />
+      <Chips label="Hair" options={HAIR} value={hair} onChange={setHair} />
+      <Chips label="Height" options={HEIGHTS} value={height} onChange={setHeight} />
       <Chips label="Your city (for weather)" options={CITIES} value={city} onChange={setCity} />
 
       <TouchableOpacity

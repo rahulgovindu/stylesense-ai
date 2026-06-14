@@ -71,7 +71,8 @@ export default function AnalysisScreen() {
       ))}
 
       <Text className="text-textSecondary text-xs text-center mt-2 mb-4">
-        Demo · shopping links are illustrative (affiliate placeholders)
+        Shop the gap on Myntra · Ajio · Amazon — filtered to your size, budget & style.{'\n'}
+        Demo · affiliate links (we earn a small commission)
       </Text>
     </ScrollView>
   );

@@ -443,7 +443,7 @@ export const wardrobeAnalysis: WardrobeAnalysis = {
       name: 'Striped Linen Shirt',
       reason: 'Introduces pattern + a summer-ready fabric for casual days.',
       priceInr: 1799,
-      platform: 'Amazon',
+      platform: 'Ajio',
       imageUrl:
         'https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&q=80',
     },
@@ -490,3 +490,142 @@ export const getItemById = (id: string): WardrobeItem | undefined =>
 
 export const getOutfitById = (id: string): OutfitRecommendation | undefined =>
   outfitRecommendations.find((o) => o.id === id);
+
+// ---------------------------------------------------------------------------
+// Calendar & events — read-only sync; proactive styling ~24h before events
+// ---------------------------------------------------------------------------
+export type UpcomingEvent = {
+  id: string;
+  title: string;
+  dateLabel: string;
+  timeLabel: string;
+  type: string; // work / date / formal / festive
+  formality: number; // 1-5
+  outfitId: string;
+  source: string;
+};
+
+export const upcomingEvents: UpcomingEvent[] = [
+  { id: 'e1', title: 'Client meeting — Acme Corp', dateLabel: 'Tomorrow', timeLabel: '10:00 AM', type: 'work', formality: 4, outfitId: 'o1', source: 'Google Calendar' },
+  { id: 'e2', title: 'Dinner with Riya', dateLabel: 'Fri', timeLabel: '8:00 PM', type: 'date', formality: 3, outfitId: 'o2', source: 'Google Calendar' },
+  { id: 'e3', title: 'Rohan & Meera’s reception', dateLabel: 'Sat', timeLabel: '7:00 PM', type: 'formal', formality: 5, outfitId: 'o3', source: 'Google Calendar' },
+  { id: 'e4', title: 'Diwali get-together', dateLabel: 'Next Tue', timeLabel: '6:30 PM', type: 'festive', formality: 4, outfitId: 'o4', source: 'Google Calendar' },
+];
+
+export const formalityLabel = (level: number): string =>
+  ['Very casual', 'Casual', 'Smart casual', 'Formal', 'Black-tie'][Math.max(0, Math.min(4, level - 1))];
+
+// ---------------------------------------------------------------------------
+// Event-mode styling — pick an event type, get ranked outfit options
+// ---------------------------------------------------------------------------
+export const eventTypes = [
+  { key: 'work', label: 'Investor pitch / Work', emoji: '💼', primaryOutfitId: 'o1' },
+  { key: 'date', label: 'First date / Dinner', emoji: '🌙', primaryOutfitId: 'o2' },
+  { key: 'formal', label: 'Wedding / Reception', emoji: '🎩', primaryOutfitId: 'o3' },
+  { key: 'festive', label: 'Festive / Diwali', emoji: '🪔', primaryOutfitId: 'o4' },
+];
+
+// Rank outfits for a chosen event type: best match first, others as alternates.
+export const rankedOutfitsForEvent = (
+  typeKey: string
+): { outfit: OutfitRecommendation; score: number; isBest: boolean }[] => {
+  const ev = eventTypes.find((e) => e.key === typeKey);
+  return outfitRecommendations
+    .map((o) => {
+      const isBest = o.id === ev?.primaryOutfitId;
+      const score = isBest ? 0.96 : Math.max(0.45, o.confidenceScore - 0.3);
+      return { outfit: o, score, isBest };
+    })
+    .sort((a, b) => b.score - a.score);
+};
+
+// ---------------------------------------------------------------------------
+// Social & trend data — Pinterest boards, IG saves, open fashion data
+// ---------------------------------------------------------------------------
+export const socialConnections = [
+  { key: 'pinterest', label: 'Pinterest', icon: 'logo-pinterest', connected: true, detail: '3 boards · 142 pins synced' },
+  { key: 'instagram', label: 'Instagram saves', icon: 'logo-instagram', connected: true, detail: '67 saved looks analysed' },
+  { key: 'trends', label: 'Open fashion trends', icon: 'trending-up', connected: true, detail: 'Trend feed enabled' },
+];
+
+export type Trend = { id: string; title: string; tag: string; image: string; note: string };
+export const trends: Trend[] = [
+  {
+    id: 't1',
+    title: 'Earthy neutrals',
+    tag: 'Trending in Bengaluru',
+    image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&q=80',
+    note: 'You already own beige chinos — lean into this with tonal layering.',
+  },
+  {
+    id: 't2',
+    title: 'Relaxed tailoring',
+    tag: 'From your Pinterest',
+    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&q=80',
+    note: 'Soft-shoulder blazers — pairs with your navy blazer for a modern fit.',
+  },
+  {
+    id: 't3',
+    title: 'Festive jewel tones',
+    tag: 'Season pick',
+    image: 'https://placehold.co/400x400/800020/F8F7F4?text=Jewel+Tones',
+    note: 'Burgundy & emerald for the festive run — matches your bandhgala.',
+  },
+];
+
+export type Influencer = {
+  id: string;
+  name: string;
+  handle: string;
+  matchReason: string;
+  lookImage: string;
+  adaptNote: string;
+};
+export const influencers: Influencer[] = [
+  {
+    id: 'inf1',
+    name: 'Arjun Mehta',
+    handle: '@arjunstyles',
+    matchReason: 'Athletic build · warm skin tone',
+    lookImage: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&q=80',
+    adaptNote: 'Recreate with your navy blazer + white Oxford — you own 3 of 3 pieces.',
+  },
+  {
+    id: 'inf2',
+    name: 'Kabir Rao',
+    handle: '@kabir.fits',
+    matchReason: 'Smart-casual · similar height',
+    lookImage: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=500&q=80',
+    adaptNote: 'Swap his denim for your indigo slim jeans + white sneakers.',
+  },
+  {
+    id: 'inf3',
+    name: 'Dev Saxena',
+    handle: '@devwears',
+    matchReason: 'Festive looks · Indian wear',
+    lookImage: 'https://placehold.co/500x500/1F2A44/E8B86D?text=Festive+Look',
+    adaptNote: 'His kurta layering works with your navy kurta + bandhgala.',
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Virtual try-on — personalised avatar preview (Partial in v1)
+// ---------------------------------------------------------------------------
+export const tryOnAvatar = {
+  imageUrl: 'https://placehold.co/320x560/1A1A2E/E8B86D?text=Your+Avatar',
+  note: 'Avatar generated from your body type (Athletic) and height (178 cm). On-device only.',
+};
+
+// ---------------------------------------------------------------------------
+// Wellness (Diet / BMI) — OPTIONAL module. Informs which silhouettes we
+// prioritise. Kept out of the core flow per product-focus feedback.
+// ---------------------------------------------------------------------------
+export const wellness = {
+  enabled: true,
+  heightCm: 178,
+  weightKg: 74,
+  bmi: 23.4,
+  bmiCategory: 'Healthy',
+  fitTip: 'Your metrics suit structured, regular fits — we avoid overly slim or boxy cuts.',
+  note: 'BMI only tunes fit & silhouette. Full diet planning is a separate optional add-on, intentionally kept out of v1 to keep StyleSense focused.',
+};
